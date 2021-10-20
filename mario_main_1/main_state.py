@@ -74,7 +74,7 @@ class Mario:
 class Gumba:
     def __init__(self):
         self.image = load_image('characters.png')
-        self.spawn = 700#random.randint(0, 3392)
+        self.spawn = 500  # random.randint(0, 3392)
         self.x = self.spawn;
         self.y = 70;
         self.frame = 0;
@@ -89,10 +89,11 @@ class Gumba:
         if (self.spawn <= map_location) and (self.spawn + 800 >= map_location):
             self.image.clip_draw(self.frame * 18 + 293, 194, 18, 20, self.x, self.y)
 
+
 class Turtle:
     def __init__(self):
         self.image = load_image('characters.png')
-        self.spawn = 720#random.randint(0, 3392)
+        self.spawn = 520  # random.randint(0, 3392)
         self.x = self.spawn;
         self.y = 76;
         self.frame = 0;
@@ -106,6 +107,25 @@ class Turtle:
         global map_location
         if (self.spawn <= map_location) and (self.spawn + 800 >= map_location):
             self.image.clip_draw(self.frame * 18 + 293, 171, 18, 22, self.x, self.y)
+
+
+class Flower:
+    def __init__(self):
+        self.image = load_image('characters.png')
+        self.spawn = 540  # random.randint(0, 3392)
+        self.x = self.spawn;
+        self.y = 74;
+        self.frame = 0;
+
+    def update(self):
+        self.frame = (self.frame + 1) % 2
+        if map_location < 3392:
+            self.x = self.x - enemy_move
+
+    def draw(self):
+        global map_location
+        if (self.spawn <= map_location) and (self.spawn + 800 >= map_location):
+            self.image.clip_draw(self.frame * 19 + 123, 194, 19, 25, self.x, self.y)
 
 
 def handle_events():
@@ -133,10 +153,11 @@ def handle_events():
 open_canvas()
 mario = Mario()
 map = Map()
-#gumbas = [Gumba() for i in range(10)]
-#turtles = [Turtle() for i in range(10)]
+# gumbas = [Gumba() for i in range(10)]
+# turtles = [Turtle() for i in range(10)]
 gumba = Gumba()
 turtle = Turtle()
+flower = Flower()
 running = True
 direction = 1
 
@@ -151,6 +172,7 @@ while running:
     map.update()
     gumba.update()
     turtle.update()
+    flower.update()
     # for Gumba in gumbas:
     #     Gumba.update()
     # for Turtle in turtles:
@@ -161,6 +183,7 @@ while running:
     mario.draw()
     gumba.draw()
     turtle.draw()
+    flower.draw()
     # for Gumba in gumbas:
     #     Gumba.draw()
     # for Turtle in turtles:
