@@ -89,6 +89,24 @@ class Gumba:
         if (self.spawn <= map_location) and (self.spawn + 800 >= map_location):
             self.image.clip_draw(self.frame * 18 + 293, 194, 18, 20, self.x, self.y)
 
+class Turtle:
+    def __init__(self):
+        self.image = load_image('characters.png')
+        self.spawn = random.randint(0, 3392)
+        self.x = self.spawn;
+        self.y = 76;
+        self.frame = 0;
+
+    def update(self):
+        self.frame = (self.frame + 1) % 2
+        if map_location < 3392:
+            self.x = self.x - enemy_move
+
+    def draw(self):
+        global map_location
+        if (self.spawn <= map_location) and (self.spawn + 800 >= map_location):
+            self.image.clip_draw(self.frame * 18 + 293, 171, 18, 22, self.x, self.y)
+
 
 def handle_events():
     global running
@@ -116,6 +134,7 @@ open_canvas()
 mario = Mario()
 map = Map()
 gumbas = [Gumba() for i in range(10)]
+turtles = [Turtle() for i in range(10)]
 running = True
 direction = 1
 
@@ -130,12 +149,16 @@ while running:
     map.update()
     for Gumba in gumbas:
         Gumba.update()
+    for Turtle in turtles:
+        Turtle.update()
     # Game drawing
     clear_canvas()
     map.draw()
     mario.draw()
     for Gumba in gumbas:
         Gumba.draw()
+    for Turtle in turtles:
+        Turtle.draw()
     update_canvas()
 
 # finalization code
