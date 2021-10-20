@@ -6,10 +6,12 @@ from pico2d import *
 
 name = "MainState"
 
-#mario = None
-#platform = None
-#map = None
+# mario = None
+# platform = None
+# map = None
 
+map_location = 800
+enemy_move = 0
 map_update_a = 0
 map_update_b = 0
 
@@ -17,16 +19,22 @@ map_update_b = 0
 class Map:
     def __init__(self):
         self.image = load_image('bg-1-1.png')
-        self.map_x = 0
+        self.map_x = 800
 
     def update(self):
+        global map_location
+        global enemy_move
         if map_update_a == 1 and map_update_b == 1:
             self.map_x += 10
-        if self.map_x > 2592:
-            self.map_x = 2592
+            map_location += 10
+            enemy_move = 10
+        else:
+            enemy_move = 0
+        if self.map_x > 3392:
+            self.map_x = 3392
 
     def draw(self):
-        self.image.clip_draw(self.map_x, 236, 800, 600, 400, 300)
+        self.image.clip_draw(self.map_x - 800, 236, 800, 600, 400, 300)
 
 
 class Mario:
@@ -54,13 +62,32 @@ class Mario:
 
     def draw(self):
         if direction == 0:
-            self.image.clip_draw(self.frame * 18+293, 365, 18, 34, self.x, self.y)
+            self.image.clip_draw(self.frame * 18 + 293, 365, 18, 34, self.x, self.y)
         elif direction == 1:
             self.image.clip_draw(255, 365, 18, 34, self.x, self.y)
         elif direction == 2:
-            self.image.clip_draw(self.frame * 18+164, 365, 18, 34, self.x, self.y)
+            self.image.clip_draw(self.frame * 18 + 164, 365, 18, 34, self.x, self.y)
         elif direction == 3:
             self.image.clip_draw(237, 365, 18, 34, self.x, self.y)
+
+
+class Gumba:
+    def __init__(self):
+        self.image = load_image('characters.png')
+        self.spawn = random.randint(0, 3392)
+        self.x = self.spawn;
+        self.y = 70;
+        self.frame = 0;
+
+    def update(self):
+        self.frame = (self.frame + 1) % 2
+        if map_location < 3392:
+            self.x = self.x - enemy_move
+
+    def draw(self):
+        global map_location
+        if (self.spawn <= map_location) and (self.spawn + 800 >= map_location):
+            self.image.clip_draw(self.frame * 18 + 293, 194, 18, 20, self.x, self.y)
 
 
 def handle_events():
@@ -88,6 +115,7 @@ def handle_events():
 open_canvas()
 mario = Mario()
 map = Map()
+gumbas = [Gumba() for i in range(10)]
 running = True
 direction = 1
 
@@ -100,10 +128,14 @@ while running:
     # Game logic
     mario.update()
     map.update()
+    for Gumba in gumbas:
+        Gumba.update()
     # Game drawing
     clear_canvas()
     map.draw()
     mario.draw()
+    for Gumba in gumbas:
+        Gumba.draw()
     update_canvas()
 
 # finalization code
