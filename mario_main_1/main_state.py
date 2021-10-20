@@ -74,7 +74,7 @@ class Mario:
 class Gumba:
     def __init__(self):
         self.image = load_image('characters.png')
-        self.spawn = random.randint(0, 3392)
+        self.spawn = 700#random.randint(0, 3392)
         self.x = self.spawn;
         self.y = 70;
         self.frame = 0;
@@ -92,7 +92,7 @@ class Gumba:
 class Turtle:
     def __init__(self):
         self.image = load_image('characters.png')
-        self.spawn = random.randint(0, 3392)
+        self.spawn = 720#random.randint(0, 3392)
         self.x = self.spawn;
         self.y = 76;
         self.frame = 0;
@@ -133,8 +133,10 @@ def handle_events():
 open_canvas()
 mario = Mario()
 map = Map()
-gumbas = [Gumba() for i in range(10)]
-turtles = [Turtle() for i in range(10)]
+#gumbas = [Gumba() for i in range(10)]
+#turtles = [Turtle() for i in range(10)]
+gumba = Gumba()
+turtle = Turtle()
 running = True
 direction = 1
 
@@ -147,18 +149,22 @@ while running:
     # Game logic
     mario.update()
     map.update()
-    for Gumba in gumbas:
-        Gumba.update()
-    for Turtle in turtles:
-        Turtle.update()
+    gumba.update()
+    turtle.update()
+    # for Gumba in gumbas:
+    #     Gumba.update()
+    # for Turtle in turtles:
+    #     Turtle.update()
     # Game drawing
     clear_canvas()
     map.draw()
     mario.draw()
-    for Gumba in gumbas:
-        Gumba.draw()
-    for Turtle in turtles:
-        Turtle.draw()
+    gumba.draw()
+    turtle.draw()
+    # for Gumba in gumbas:
+    #     Gumba.draw()
+    # for Turtle in turtles:
+    #     Turtle.draw()
     update_canvas()
 
 # finalization code
