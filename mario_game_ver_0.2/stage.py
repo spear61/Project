@@ -24,7 +24,10 @@ class Stage_1_1:
 
     def draw(self):
         self.image.clip_draw(int(self.x), 0, 512, 480, 256, 240)
-        debug_print('map_x :' + str(self.x))
+        SMB_state.font.draw(0, 470, 'MARIO            WORLD     TIME', (255, 255, 255))
+        SMB_state.font.draw(0, 450,
+                            str(SMB_state.mario_score) + '         x' + str(SMB_state.mario_coin) + '      1-' + str(
+                                SMB_state.map_state), (255, 255, 255))
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
@@ -51,7 +54,10 @@ class Stage_1_2:
 
     def draw(self):
         self.image.clip_draw(int(self.x)+522, 458, 512, 480, 256, 240)
-        debug_print('map_x :' + str(self.x))
+        SMB_state.font.draw(0, 470, 'MARIO            WORLD     TIME', (255, 255, 255))
+        SMB_state.font.draw(0, 450,
+                            str(SMB_state.mario_score) + '         x' + str(SMB_state.mario_coin) + '      1-' + str(
+                                SMB_state.map_state), (255, 255, 255))
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):

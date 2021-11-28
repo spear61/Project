@@ -15,6 +15,8 @@ logo_time = 0.0
 def enter():
     global image
     image = load_image('world_start_image.png')
+    if SMB_state.font == None:
+        SMB_state.font = load_font('mario_text.TTF', 16)
 
 
 def exit():
@@ -41,10 +43,13 @@ def draw():
 
     clear_canvas()
     image.draw(256, 240)
+    SMB_state.font.draw(0, 470, 'MARIO            WORLD     TIME', (255, 255, 255))
+    SMB_state.font.draw(0,450, str(SMB_state.mario_score)+'         x' + str(SMB_state.mario_coin)+'      1-'+str(SMB_state.map_state),(255,255,255))
     if SMB_state.mario_life < 0:
-        debug_print('   GAME OVER    ')
+        SMB_state.font.draw(175,240, 'GAME OVER', (255,255,255))
     else:
-        debug_print('   stage : 1 - ' + str(SMB_state.map_state) + '    life : ' + str(SMB_state.mario_life))
+        SMB_state.font.draw(256,240,'x'+str(SMB_state.mario_life),(255,255,255))
+
     update_canvas()
 
 def handle_events():

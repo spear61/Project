@@ -3,25 +3,21 @@ import game_framework
 import game_world
 import SMB_state
 from pico2d import *
-
-# mario Run Speed
-# fill expressions correctly
-import stage
 from ball import Ball
 
 history = []
 
+# mario Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)
 RUN_SPEED_KMPH = 20.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
-# Boy Action Speed
-# fill expressions correctly
+# Mario Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 3
+FRAMES_PER_ACTION = 4
 
 
 
@@ -107,7 +103,7 @@ class RunState:
             mario.fire_ball()
 
     def do(mario):
-        mario.frame = (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3 + 1
+        mario.frame = (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         mario.x += mario.velocity * game_framework.frame_time
         if mario.x >= 255:
             SMB_state.map_x_velocity = RUN_SPEED_PPS
@@ -121,9 +117,9 @@ class RunState:
     @staticmethod
     def draw(mario):
         if mario.dir == 1:
-            mario.image.clip_draw(int(mario.frame)* 40, 0, 40, 64, mario.x, mario.y)
+            mario.image.clip_draw(int(mario.frame + 1) * 40, 0, 40, 64, mario.x, mario.y)
         else:
-            mario.image.clip_draw(int(mario.frame)* 40, 64, 40, 64, mario.x, mario.y)
+            mario.image.clip_draw(int(mario.frame + 1) * 40, 64, 40, 64, mario.x, mario.y)
 
 
 class DashState:
@@ -147,7 +143,7 @@ class DashState:
         pass
 
     def do(mario):
-        mario.frame = (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3 + 1
+        mario.frame = (mario.frame + FRAMES_PER_ACTION * 2 * ACTION_PER_TIME * game_framework.frame_time) % 4
         mario.x += mario.velocity * game_framework.frame_time * 3
         if mario.x >= 255:
             SMB_state.map_x_velocity = RUN_SPEED_PPS * 3
@@ -160,9 +156,9 @@ class DashState:
     @staticmethod
     def draw(mario):
         if mario.dir == 1:
-            mario.image.clip_draw(int(mario.frame) * 40, 0, 40, 64, mario.x, mario.y)
+            mario.image.clip_draw(int(mario.frame+1) * 40, 0, 40, 64, mario.x, mario.y)
         else:
-            mario.image.clip_draw(int(mario.frame) * 40, 64, 40, 64, mario.x, mario.y)
+            mario.image.clip_draw(int(mario.frame+1) * 40, 64, 40, 64, mario.x, mario.y)
 
 
 class JumpState:
@@ -239,9 +235,9 @@ class JumpState:
     @staticmethod
     def draw(mario):
         if mario.dir == 1:
-            mario.image.clip_draw(160, 0, 40, 64, mario.x, mario.y)
+            mario.image.clip_draw(200, 0, 40, 64, mario.x, mario.y)
         else:
-            mario.image.clip_draw(160, 64, 40, 64, mario.x, mario.y)
+            mario.image.clip_draw(200, 64, 40, 64, mario.x, mario.y)
 
 
 next_state_table = {

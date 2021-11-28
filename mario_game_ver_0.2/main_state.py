@@ -21,6 +21,8 @@ game_over_zones = []
 
 
 def enter():
+    if SMB_state.font == None:
+        SMB_state.font = load_font('mario_text.TTF', 16)
     global mario
     mario = Mario()
     game_world.add_object(mario, 1)
