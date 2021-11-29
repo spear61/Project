@@ -10,11 +10,13 @@ import world_start_state
 import SMB_state
 
 from mario import Mario
+from gumba import Gumba
 from stage import Stage_1_1, Stage_1_2, Game_over_zone
 
 name = "MainState"
 
 mario = None
+gumba = None
 stage_1_1 = None
 stage_1_2 = None
 game_over_zones = []
@@ -26,6 +28,10 @@ def enter():
     global mario
     mario = Mario()
     game_world.add_object(mario, 1)
+
+    global gumba
+    gumba = Gumba()
+    game_world.add_object(gumba, 1)
 
     if SMB_state.map_state == 1:
         global stage_1_1
