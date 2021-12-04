@@ -11,15 +11,18 @@ import SMB_state
 
 from mario import Mario
 from gumba import Gumba
-from stage import Stage_1_1, Stage_1_2, Game_over_zone
+from piranha_plant import Piranha_plant
+from stage import Stage_1_1, Stage_1_2, Floor
+
 
 name = "MainState"
 
 mario = None
 gumba = None
+piranha_plant = None
 stage_1_1 = None
 stage_1_2 = None
-game_over_zones = []
+floors = []
 
 
 def enter():
@@ -33,6 +36,10 @@ def enter():
     gumba = Gumba()
     game_world.add_object(gumba, 1)
 
+    global piranha_plant
+    piranha_plant = Piranha_plant()
+    game_world.add_object(piranha_plant, 1)
+
     if SMB_state.map_state == 1:
         global stage_1_1
         stage_1_1 = Stage_1_1()
@@ -43,16 +50,16 @@ def enter():
         stage_1_2 = Stage_1_2()
         game_world.add_object(stage_1_2, 0)
 
-    global game_over_zones
-    game_over_zones = [Game_over_zone() for i in range(3)]
+    global floor
+    floors = [Floor() for i in range(3)]
     if SMB_state.map_state == 1:
-        game_over_zones[0].x = 2252
-        game_over_zones[0].gap = 66
-        game_over_zones[1].x = 2807
-        game_over_zones[1].gap = 98
-        game_over_zones[2].x = 4994
-        game_over_zones[2].gap = 65
-    game_world.add_objects(game_over_zones, 1)
+        floors[0].x = 2252
+        floors[0].gap = 66
+        floors[1].x = 2807
+        floors[1].gap = 98
+        floors[2].x = 4994
+        floors[2].gap = 65
+    game_world.add_objects(floors, 1)
 
 
 
@@ -99,14 +106,14 @@ def update():
         game_object.update()
     # if not collide(mario, grass):
     #     mario.y += mario.gravity_speed // -2 * (mario.timer ** 2)
-    for game_over_zone in game_over_zones:
+    for game_over_zone in floors:
         if collide(game_over_zone, mario):
             game_framework.change_state(world_start_state)
             SMB_state.mario_life -= 1
             if SMB_state.mario_life < 0:
                 game_framework.change_state(world_start_state)
             pass
-    delay(0.013)
+    # delay(0.013)
     # fill here
 
 

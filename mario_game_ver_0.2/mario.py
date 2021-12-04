@@ -217,7 +217,8 @@ class JumpState:
                 SMB_state.map_x_velocity = 0
                 SMB_state.map_move = False
         # mario.gravity_speed += math.sin(mario.gravity_speed) * game_framework.frame_time
-        mario.y += mario.gravity_speed // -2 * (mario.timer ** 2) + 60 * mario.timer
+        # mario.y += mario.gravity_speed // -2 * (mario.timer ** 2) + 60 * mario.timer
+        mario.y += mario.gravity_speed // -1.9 * (mario.timer ** 2) + 37 * mario.timer
 
         if mario.y < 82:
             mario.y = 82
