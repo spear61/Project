@@ -26,10 +26,10 @@ class Gumba:
         if Gumba.image == None:
             Gumba.image = load_image('gumba.png')
 
-    def __init__(self):
-        self.x, self.y = 256, 66
+    def __init__(self, x=256, y=66, dir=1):
+        self.x, self.y = x, y
         self.load_image()
-        self.dir = 1
+        self.dir = dir
         self.speed = 0
         self.timer = 0
         self.wait_timer = 0
@@ -78,7 +78,7 @@ class Gumba:
 
     def draw(self):
         draw_rectangle(*self.get_bb())
-        if math.cos(self.dir) < 0:
+        if self.dir > 0:
             if self.speed == 0:
                 self.image.clip_draw(32, 0, 32, 32, self.x, self.y)
             else:

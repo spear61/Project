@@ -9,60 +9,71 @@ import logo_state
 import world_start_state
 import SMB_state
 
-from mario import Mario
+from mario import Mario, Top_mario, Bottom_mario
 from gumba import Gumba
+from koopa_troopa import Koopa_troopa
 from piranha_plant import Piranha_plant
-from stage import Stage_1_1, Stage_1_2, Floor
-
+from stage import Stage_1_1, Stage_1_2, Floor, Floor_draw
+from objects import Tunnel
 
 name = "MainState"
-
-mario = None
-gumba = None
-piranha_plant = None
-stage_1_1 = None
-stage_1_2 = None
-floors = []
 
 
 def enter():
     if SMB_state.font == None:
         SMB_state.font = load_font('mario_text.TTF', 16)
-    global mario
-    mario = Mario()
-    game_world.add_object(mario, 1)
-
-    global gumba
-    gumba = Gumba()
-    game_world.add_object(gumba, 1)
-
-    global piranha_plant
-    piranha_plant = Piranha_plant()
-    game_world.add_object(piranha_plant, 1)
 
     if SMB_state.map_state == 1:
-        global stage_1_1
-        stage_1_1 = Stage_1_1()
-        game_world.add_object(stage_1_1, 0)
+        with open('tunnel_1_1.json', 'r') as f:
+            tunnel_data_list = json.load(f)
+        for data in tunnel_data_list:
+            tunnel = Tunnel(data['x'], data['y'])
+            game_world.add_object(tunnel, 1)
+        SMB_state.stage_1_1 = Stage_1_1()
+        game_world.add_object(SMB_state.stage_1_1, 0)
+        with open('floor_1_1.json', 'r') as f:
+            floor_data_list = json.load(f)
+        for data in floor_data_list:
+            for floor in SMB_state.floors:
+                floor = Floor(data['x'], data['width'])
+                game_world.add_object(floor, 1)
+        SMB_state.floor_draw = Floor_draw()
+        game_world.add_object(SMB_state.floor_draw, 1)
+        # SMB_state.gumba = Gumba()
+        # game_world.add_object(SMB_state.gumba, 1)
+        with open('gumba_1_1.json', 'r') as f:
+            gumba_data_list = json.load(f)
+        for data in gumba_data_list:
+            gumba = Gumba(data['x'], data['y'], data['dir'])
+            game_world.add_object(gumba, 1)
+        # SMB_state.koopa_troopa = Koopa_troopa()
+        # game_world.add_object(SMB_state.koopa_troopa, 1)
+        # with open('troopa_1_1.json', 'r') as f:
+        #     troopa_data_list = json.load(f)
+        # for data in troopa_data_list:
+        #     koopa_troopa = Koopa_troopa(data['x'], data['y'], data['dir'])
+        #     game_world.add_object(koopa_troopa, 1)
+        # # SMB_state.piranha_plant = Piranha_plant()
+        # # game_world.add_object(SMB_state.piranha_plant, 1)
+        # with open('piranha_1_1.json', 'r') as f:
+        #     piranha_data_list = json.load(f)
+        # for data in piranha_data_list:
+        #     piranha_plant = Piranha_plant(data['x'], data['y'])
+        #     game_world.add_object(piranha_plant, 1)
+
 
     if SMB_state.map_state == 2:
-        global stage_1_2
-        stage_1_2 = Stage_1_2()
-        game_world.add_object(stage_1_2, 0)
+        SMB_state.stage_1_2 = Stage_1_2()
+        game_world.add_object(SMB_state.stage_1_2, 0)
 
-    global floor
-    floors = [Floor() for i in range(3)]
-    if SMB_state.map_state == 1:
-        floors[0].x = 2252
-        floors[0].gap = 66
-        floors[1].x = 2807
-        floors[1].gap = 98
-        floors[2].x = 4994
-        floors[2].gap = 65
-    game_world.add_objects(floors, 1)
+    SMB_state.mario = Mario()
+    game_world.add_object(SMB_state.mario, 1)
 
+    SMB_state.top_mario = Top_mario()
+    game_world.add_object(SMB_state.top_mario, 1)
 
-
+    SMB_state.top_mario = Bottom_mario()
+    game_world.add_object(SMB_state.top_mario, 1)
 
 def exit():
     game_world.clear()
@@ -76,18 +87,6 @@ def resume():
     pass
 
 
-def collide(a, b):
-    left_a, bottom_a, right_a, top_a = a.get_bb()
-    left_b, bottom_b, right_b, top_b = b.get_bb()
-
-    if left_a > right_b: return False
-    if right_a < left_b: return False
-    if top_a < bottom_b: return False
-    if bottom_a > top_b: return False
-
-    return True
-
-
 def handle_events():
     events = get_events()
     for event in events:
@@ -98,7 +97,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_DELETE:
             game_framework.change_state(world_start_state)
         else:
-            mario.handle_event(event)
+            SMB_state.mario.handle_event(event)
 
 
 def update():
@@ -106,13 +105,13 @@ def update():
         game_object.update()
     # if not collide(mario, grass):
     #     mario.y += mario.gravity_speed // -2 * (mario.timer ** 2)
-    for game_over_zone in floors:
-        if collide(game_over_zone, mario):
-            game_framework.change_state(world_start_state)
-            SMB_state.mario_life -= 1
-            if SMB_state.mario_life < 0:
-                game_framework.change_state(world_start_state)
-            pass
+    # for Floor in SMB_state.floors:
+    #     if collide(Floor, SMB_state.mario):
+    #         game_framework.change_state(world_start_state)
+    #         SMB_state.mario_life -= 1
+    #         if SMB_state.mario_life < 0:
+    #             game_framework.change_state(world_start_state)
+    #         pass
     # delay(0.013)
     # fill here
 

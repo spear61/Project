@@ -23,13 +23,13 @@ class Koopa_troopa:
     image = None
 
     def load_image(self):
-        if Koopa_troopa.image == None:
+        if Koopa_troopa.image is None:
             Koopa_troopa.image = load_image('koopa_troopa.png')
 
-    def __init__(self):
-        self.x, self.y = 500, 66
+    def __init__(self, x = 100, y = 72, dir = 1):
+        self.x, self.y = x, y
         self.load_image()
-        self.dir = 1
+        self.dir = dir
         self.speed = 0
         self.timer = 0
         self.wait_timer = 0
@@ -67,7 +67,7 @@ class Koopa_troopa:
         self.bt = BehaviorTree(wander_wait_node)
 
     def get_bb(self):
-        return self.x - 16, self.y - 16, self.x + 16, self.y + 16
+        return self.x - 18, self.y - 22, self.x + 18, self.y + 22
 
     def update(self):
         self.bt.run()
@@ -78,16 +78,16 @@ class Koopa_troopa:
 
     def draw(self):
         draw_rectangle(*self.get_bb())
-        if math.cos(self.dir) < 0:
+        if self.dir > 0:
             if self.speed == 0:
-                self.image.clip_draw(32, 0, 32, 32, self.x, self.y)
+                self.image.clip_draw(72, 0, 36, 44, self.x, self.y)
             else:
-                self.image.clip_draw(32 + int(self.frame) * 32, 0, 32, 32, self.x, self.y)
+                self.image.clip_draw(72 + int(self.frame) * 36, 0, 36, 44, self.x, self.y)
         else:
             if self.speed == 0:
-                self.image.clip_draw(32, 0, 32, 32, self.x, self.y)
+                self.image.clip_draw(0, 0, 36, 44, self.x, self.y)
             else:
-                self.image.clip_draw(32 + int(self.frame) * 32, 0, 32, 32, self.x, self.y)
+                self.image.clip_draw(int(self.frame) * 36, 0, 36, 44, self.x, self.y)
 
     def handle_event(self, event):
         pass

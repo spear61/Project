@@ -3,8 +3,10 @@ import game_framework
 import game_world
 import SMB_state
 from pico2d import *
-from ball import Ball
 
+import main_state
+from ball import Ball
+from collision import collide
 history = []
 
 # mario Run Speed
@@ -71,7 +73,9 @@ class IdleState:
 
     def do(mario):
         SMB_state.map_move = False
-        pass
+        for floor in SMB_state.floors:
+            if not collide(Bottom_mario, floor):
+                mario.y += mario.gravity_speed // -1.9 * game_framework.frame_time
 
     def draw(mario):
         if mario.dir == 1:
@@ -195,6 +199,8 @@ class JumpState:
         pass
 
     def exit(mario, event):
+        if event == SPACE:
+            mario.fire_ball()
         pass
 
     def do(mario):
@@ -298,6 +304,12 @@ class Mario:
                 print('State:', self.cur_state.__name__, 'Event:', event_name[event])
                 exit(-1)
             self.cur_state.enter(self, event)
+        # if self.cur_state == IdleState or self.cur_state == RunState or self.cur_state == DashState:
+        #     for _ in SMB_state.floors:
+        #         if collide(SMB_state.bottom_mario, _) == False:
+        #             self.y -= self.gravity_speed // 1.9 * game_framework.frame_time
+
+
 
     def draw(self):
         self.cur_state.draw(self)
@@ -313,3 +325,45 @@ class Mario:
                 print(history[-10:])
             else:
                 self.add_event(key_event)
+
+
+class Top_mario:
+
+    def __init__(self):
+        self.x, self.y = 0, 0
+        pass
+
+    def update(self):
+        self.x = SMB_state.mario.x
+        self.y = SMB_state.mario.y
+        pass
+
+    def draw(self):
+        # debug_print('x :' + str(Game_over_zone.x) + '  gap:' + str(Game_over_zone.gap))
+        # if self.x >= 0 and self.x <= 512 :
+        draw_rectangle(*self.get_bb())
+        pass
+
+    def get_bb(self):
+        return self.x - 20, self.y + 32, self.x + 12, self.y + 34
+
+
+class Bottom_mario:
+
+    def __init__(self):
+        self.x, self.y = 0, 0
+        pass
+
+    def update(self):
+        self.x = SMB_state.mario.x
+        self.y = SMB_state.mario.y
+        pass
+
+    def draw(self):
+        # debug_print('x :' + str(Game_over_zone.x) + '  gap:' + str(Game_over_zone.gap))
+        # if self.x >= 0 and self.x <= 512 :
+        draw_rectangle(*self.get_bb())
+        pass
+
+    def get_bb(self):
+        return self.x - 20, self.y - 32, self.x + 12, self.y - 34

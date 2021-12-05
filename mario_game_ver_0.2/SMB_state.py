@@ -1,3 +1,14 @@
+mario = None
+top_mario = None
+bottom_mario = None
+gumba = None
+koopa_troopa = None
+piranha_plant = None
+stage_1_1 = None
+stage_1_2 = None
+floors = []
+floor_draw = None
+
 mario_score = 0
 mario_coin = 0
 mario_life = 1

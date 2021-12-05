@@ -16,7 +16,7 @@ class Ball:
 
     def __init__(self, x=400, y=300, velocity=1):
         if Ball.image == None:
-            Ball.image = load_image('ball21x21.png')
+            Ball.image = load_image('fire_ball.png')
         self.x, self.y, self.velocity = x, y, velocity
 
     def draw(self):
@@ -24,7 +24,7 @@ class Ball:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
+        return self.x - 8, self.y - 8, self.x + 8, self.y + 8
 
     def update(self):
         self.x += self.velocity * game_framework.frame_time * RUN_SPEED_PPS * 2.1

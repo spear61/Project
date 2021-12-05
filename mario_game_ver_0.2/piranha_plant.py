@@ -1,6 +1,7 @@
 import random
 import math
 import game_framework
+from collision import collide
 from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
 from pico2d import *
 
@@ -24,12 +25,11 @@ class Piranha_plant:
 
     def load_image(self):
         if Piranha_plant.image == None:
-            Piranha_plant.image = load_image('gumba.png')
+            Piranha_plant.image = load_image('piranha_plant.png')
 
-    def __init__(self):
-        self.x, self.y = 256, 66
+    def __init__(self, x = 256, y = 73):
+        self.x, self.y = x, y
         self.load_image()
-        self.dir = 1
         self.speed = 0
         self.timer = 0
         self.wait_timer = 0
@@ -40,11 +40,7 @@ class Piranha_plant:
         self.speed = RUN_SPEED_PPS
         self.timer -= game_framework.frame_time
         if self.timer <= 0:
-            self.timer = 1.5
-            if self.dir == 1:
-                self.dir = -1
-            elif self.dir == -1:
-                self.dir = 1
+            self.timer = 1.0
             return BehaviorTree.SUCCESS
         else:
             return BehaviorTree.RUNNING
@@ -53,7 +49,7 @@ class Piranha_plant:
         self.speed = 0
         self.wait_timer -= game_framework.frame_time
         if self.wait_timer <= 0:
-            self.wait_timer = 0.1
+            self.wait_timer = 1.5
             return BehaviorTree.SUCCESS
 
         return BehaviorTree.RUNNING
@@ -67,27 +63,22 @@ class Piranha_plant:
         self.bt = BehaviorTree(wander_wait_node)
 
     def get_bb(self):
-        return self.x - 16, self.y - 16, self.x + 16, self.y + 16
+        return self.x - 16, self.y - 23, self.x + 16, self.y + 23
 
     def update(self):
         self.bt.run()
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        self.y += self.speed * self.dir * game_framework.frame_time
+        self.y += self.speed * game_framework.frame_time
         if SMB_state.map_move is True:
             self.x -= SMB_state.map_x_velocity * game_framework.frame_time
 
     def draw(self):
         draw_rectangle(*self.get_bb())
-        if math.cos(self.dir) < 0:
-            if self.speed == 0:
-                self.image.clip_draw(32, 0, 32, 32, self.x, self.y)
-            else:
-                self.image.clip_draw(32 + int(self.frame) * 32, 0, 32, 32, self.x, self.y)
+
+        if self.speed == 0:
+            self.image.clip_draw(int(self.frame) * 32, 0, 32, 46, self.x, self.y)
         else:
-            if self.speed == 0:
-                self.image.clip_draw(32, 0, 32, 32, self.x, self.y)
-            else:
-                self.image.clip_draw(32 + int(self.frame) * 32, 0, 32, 32, self.x, self.y)
+            self.image.clip_draw(int(self.frame) * 32, 0, 32, 46, self.x, self.y)
 
     def handle_event(self, event):
         pass
