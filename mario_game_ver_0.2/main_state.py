@@ -23,6 +23,15 @@ def enter():
     if SMB_state.font == None:
         SMB_state.font = load_font('mario_text.TTF', 16)
 
+    SMB_state.mario = Mario()
+    game_world.add_object(SMB_state.mario, 1)
+
+    SMB_state.top_mario = Top_mario()
+    game_world.add_object(SMB_state.top_mario, 1)
+
+    SMB_state.bottom_mario = Bottom_mario()
+    game_world.add_object(SMB_state.bottom_mario, 1)
+
     if SMB_state.map_state == 1:
         with open('tunnel_1_1.json', 'r') as f:
             tunnel_data_list = json.load(f)
@@ -34,9 +43,8 @@ def enter():
         with open('floor_1_1.json', 'r') as f:
             floor_data_list = json.load(f)
         for data in floor_data_list:
-            for floor in SMB_state.floors:
-                floor = Floor(data['x'], data['width'])
-                game_world.add_object(floor, 1)
+            floor = Floor(data['x'], data['width'])
+            game_world.add_object(floor, 1)
         SMB_state.floor_draw = Floor_draw()
         game_world.add_object(SMB_state.floor_draw, 1)
         # SMB_state.gumba = Gumba()
@@ -61,19 +69,12 @@ def enter():
         #     piranha_plant = Piranha_plant(data['x'], data['y'])
         #     game_world.add_object(piranha_plant, 1)
 
-
     if SMB_state.map_state == 2:
         SMB_state.stage_1_2 = Stage_1_2()
         game_world.add_object(SMB_state.stage_1_2, 0)
 
-    SMB_state.mario = Mario()
-    game_world.add_object(SMB_state.mario, 1)
 
-    SMB_state.top_mario = Top_mario()
-    game_world.add_object(SMB_state.top_mario, 1)
 
-    SMB_state.top_mario = Bottom_mario()
-    game_world.add_object(SMB_state.top_mario, 1)
 
 def exit():
     game_world.clear()
