@@ -6,15 +6,17 @@ from pico2d import *
 import game_framework
 import game_world
 import logo_state
+import mario
 import world_start_state
 import SMB_state
 
-from mario import Mario, Top_mario, Bottom_mario
+from mario import Mario, Bottom_mario
+    # Top_mario, Bottom_mario
 from gumba import Gumba
 from koopa_troopa import Koopa_troopa
 from piranha_plant import Piranha_plant
 from stage import Stage_1_1, Stage_1_2, Floor, Floor_draw
-from objects import Tunnel
+from objects import Tunnel,Block
 
 name = "MainState"
 
@@ -23,16 +25,19 @@ def enter():
     if SMB_state.font == None:
         SMB_state.font = load_font('mario_text.TTF', 16)
 
-    SMB_state.mario = Mario()
-    game_world.add_object(SMB_state.mario, 1)
 
-    SMB_state.top_mario = Top_mario()
-    game_world.add_object(SMB_state.top_mario, 1)
 
-    SMB_state.bottom_mario = Bottom_mario()
-    game_world.add_object(SMB_state.bottom_mario, 1)
+    # SMB_state.top_mario = Top_mario()
+    # game_world.add_object(SMB_state.top_mario, 1)
+    #
+
 
     if SMB_state.map_state == 1:
+        with open('block_1_1.json', 'r') as f:
+            block_data_list = json.load(f)
+        for data in block_data_list:
+            block = Block(data['x'],data['y'],data['prop'],data['item'])
+            game_world.add_object(block, 1)
         with open('tunnel_1_1.json', 'r') as f:
             tunnel_data_list = json.load(f)
         for data in tunnel_data_list:
@@ -53,7 +58,7 @@ def enter():
             gumba_data_list = json.load(f)
         for data in gumba_data_list:
             gumba = Gumba(data['x'], data['y'], data['dir'])
-            game_world.add_object(gumba, 1)
+            game_world.add_object(gumba, 0)
         # SMB_state.koopa_troopa = Koopa_troopa()
         # game_world.add_object(SMB_state.koopa_troopa, 1)
         # with open('troopa_1_1.json', 'r') as f:
@@ -72,6 +77,11 @@ def enter():
     if SMB_state.map_state == 2:
         SMB_state.stage_1_2 = Stage_1_2()
         game_world.add_object(SMB_state.stage_1_2, 0)
+
+    SMB_state.mario = Mario()
+    game_world.add_object(SMB_state.mario, 1)
+    SMB_state.bottom_mario = Bottom_mario()
+    game_world.add_object(SMB_state.bottom_mario, 1)
 
 
 
@@ -97,6 +107,8 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_DELETE:
             game_framework.change_state(world_start_state)
+        elif event == SDL_KEYDOWN and event.key == SDLK_BACKSPACE:
+            SMB_state.mario.add_event(mario.GameOverState)
         else:
             SMB_state.mario.handle_event(event)
 

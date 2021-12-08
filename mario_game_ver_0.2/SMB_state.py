@@ -8,11 +8,11 @@ stage_1_1 = None
 stage_1_2 = None
 floor_draw = None
 floors = []
+ball = None
 
 mario_score = 0
-mario_collide_object = 'floor'
 mario_coin = 0
-mario_life = 1
+mario_life = 2
 mario_item_mode = 1
 
 stage_timer = 0

@@ -1,8 +1,13 @@
 import random
 import math
+
+import collision
 import game_framework
+import game_world
+import mario
 from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
 from pico2d import *
+import ball
 
 import SMB_state
 
@@ -35,6 +40,9 @@ class Gumba:
         self.wait_timer = 0
         self.frame = 0
         self.build_behavior_tree()
+        self.life = 1
+        self.life_timer = 2
+        self.dead_cod = 0
 
     def wander(self):
         self.speed = RUN_SPEED_PPS
@@ -76,9 +84,34 @@ class Gumba:
         if SMB_state.map_move is True:
             self.x -= SMB_state.map_x_velocity * game_framework.frame_time
 
+        # if collision.collide(self, SMB_state.bottom_mario):
+        #     if self.life == 1:
+        #         self.life_timer = 2
+        #         self.life = 0
+        #     if self.life_timer < 0:
+        #         game_world.remove_object(self)
+        if self.life == 0:
+            self.life_timer -= game_framework.frame_time
+            if self.dead_cod == 0:
+                self.dead_cod = self.x
+            if self.dead_cod != 0 and SMB_state.map_move == True:
+                self.dead_cod -= SMB_state.map_x_velocity * game_framework.frame_time
+            if self.life_timer < 0:
+                game_world.remove_object(self)
+        if self.life == 1 and collision.collide(SMB_state.bottom_mario, self):
+            self.life = 0
+            SMB_state.mario_score += 100
+        if self.life == 1 and collision.collide(SMB_state.mario, self):
+            mario.y = self.y + 32
+            SMB_state.mario.add_event(mario.GO_TO_GAMEOVER)
+
+
+
     def draw(self):
         draw_rectangle(*self.get_bb())
-        if self.dir > 0:
+        if self.life == 0:
+            self.image.clip_draw(0,0,32,32,self.dead_cod, self.y)
+        elif self.dir > 0:
             if self.speed == 0:
                 self.image.clip_draw(32, 0, 32, 32, self.x, self.y)
             else:
@@ -88,6 +121,8 @@ class Gumba:
                 self.image.clip_draw(32, 0, 32, 32, self.x, self.y)
             else:
                 self.image.clip_draw(32 + int(self.frame) * 32, 0, 32, 32, self.x, self.y)
+
+
 
     def handle_event(self, event):
         pass

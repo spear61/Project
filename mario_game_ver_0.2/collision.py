@@ -7,4 +7,19 @@ def collide(a, b):
     if top_a < bottom_b: return False
     if bottom_a > top_b: return False
 
+    # return True
+    # if bottom_b < bottom_a:
+    #     print('bottom')
+    #     return 'bottom'
+    # elif top_b > top_a:
+    #     print('top')
+    #     return 'top'
+    # elif left_b < left_a:
+    #     print('left')
+    #     return 'left'
+    # elif right_b > right_a:
+    #     print('right')
+    #     return 'right'
+
     return True
+
