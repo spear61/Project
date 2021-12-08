@@ -108,7 +108,7 @@ class Gumba:
 
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         if self.life == 0:
             self.image.clip_draw(0,0,32,32,self.dead_cod, self.y)
         elif self.dir > 0:

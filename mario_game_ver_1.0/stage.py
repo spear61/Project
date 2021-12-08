@@ -109,7 +109,7 @@ class Floor:
     def draw(self):
         # debug_print('x :' + str(Game_over_zone.x) + '  gap:' + str(Game_over_zone.gap))
         # if self.x >= 0 and self.x <= 512 :
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         pass
 
     def get_bb(self):

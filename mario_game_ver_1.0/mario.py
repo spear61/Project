@@ -384,7 +384,7 @@ class Mario:
         # debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir))
         # fill here
         # self.font.draw(self.x - 60, self.y + 50, '(Time: %3.2f' %get_time(), (255, 255, 0))
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
@@ -430,7 +430,7 @@ class Bottom_mario:
     def draw(self):
         # debug_print('x :' + str(Game_over_zone.x) + '  gap:' + str(Game_over_zone.gap))
         # if self.x >= 0 and self.x <= 512 :
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         pass
 
     def get_bb(self):

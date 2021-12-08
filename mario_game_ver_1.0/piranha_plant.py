@@ -73,7 +73,7 @@ class Piranha_plant:
             self.x -= SMB_state.map_x_velocity * game_framework.frame_time
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
 
         if self.speed == 0:
             self.image.clip_draw(int(self.frame) * 32, 0, 32, 46, self.x, self.y)

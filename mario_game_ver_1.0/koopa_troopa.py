@@ -77,7 +77,7 @@ class Koopa_troopa:
             self.x -= SMB_state.map_x_velocity * game_framework.frame_time
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         if self.dir > 0:
             if self.speed == 0:
                 self.image.clip_draw(72, 0, 36, 44, self.x, self.y)

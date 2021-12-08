@@ -63,7 +63,7 @@ class Block:
             self.image.clip_draw_to_origin(160, 96, 32, 32, self.x, self.y)
         elif self.prop == 'stair':
             self.image.clip_draw_to_origin(320, 0, 32, 32, self.x, self.y)
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         return self.x, self.y, self.x + 32, self.y + 32
@@ -137,7 +137,7 @@ class Tunnel:
 
     def draw(self):
         self.image.clip_draw_to_origin(0, 0, 64, 128, self.x, self.y)
-        draw_rectangle(*(self.get_bb()))
+        # draw_rectangle(*(self.get_bb()))
 
     def get_bb(self):
         return self.x, self.y, self.x + 64, self.y + 128
